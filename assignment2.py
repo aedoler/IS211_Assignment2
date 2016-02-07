@@ -3,6 +3,7 @@
 """Part 1"""
 
 import urllib2
+import csv
 
 def downloadData(url):
     """fetches info from a url.
@@ -13,5 +14,14 @@ def downloadData(url):
     Example:
         downloadData(www.facebook.com)
     """
-    response = urllib2.urlopon(url)
+    response = urllib2.urlopen(url)
     html = response.read()
+    return html
+
+def processData(url):
+    filecontent = downloadData(url)
+    cr = csv.reader(filecontent)
+    return cr
+
+print processData('http://winterolympicsmedals.com/medals.csv')
+
