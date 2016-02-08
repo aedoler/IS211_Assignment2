@@ -66,12 +66,6 @@ def main():
         LOG_FILENAME = 'errors.log'
         logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
         logging.debug(("The following error occured: {}".format(Exception))
-        file1 = open(LOG_FILENAME, 'rt')
-        try:
-            body = file1.read()
-        finally:
-            file1.close()
-
         sys.exit()
     personData = processData(csvData)
     return personData
