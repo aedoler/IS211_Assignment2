@@ -2,11 +2,14 @@
 # -*- coding: utf-8 -*-
 """Part 1"""
 
+import sys
 import urllib2
 import csv
 import datetime
 import logging
 import argparse
+
+
 
 def downloadData(url):
     """fetches info from a url.
@@ -35,7 +38,8 @@ def processData(urlcontent):
         try:
             bday = datetime.datetime(row[2])
         except:
-            logging.debug('Date in incorrect format')
+            logging.debug('Incorrect date format for entry')
+
 
         if cust_id not in datadict:
             datadict[cust_id] = (name, bday)
@@ -46,16 +50,33 @@ def processData(urlcontent):
 def displayPerson(id, personData):
     datadict = processData(personData)
     try:
-        person_info = datadict.get(id)
+        person_info = datadict.get(id, default=None)
     except:
         print "No user found with that ID"
-    return datadict
+    return "Person{} is {} with a birthday " \
+           "of {}".format(id, person_info[0], person_info[1])
 
 def main():
     try:
         parser = argparse.ArgumentParser()
-        parser.add_argument('-url')
+        parser.add_argument('-url', type=str)
         args = parser.parse_args()
+        csvData = downloadData(args)
+    except Exception:
+        LOG_FILENAME = 'errors.log'
+        logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
+        logging.debug(("The following error occured: {}".format(Exception))
+        file1 = open(LOG_FILENAME, 'rt')
+        try:
+            body = file1.read()
+        finally:
+            file1.close()
+
+        sys.exit()
+    personData = processData(csvData)
+    return personData
+
+
 
 
 
