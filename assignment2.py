@@ -3,10 +3,10 @@
 """Part 1"""
 
 import urllib2
-import urllib
 import csv
 import datetime
 import logging
+import argparse
 
 def downloadData(url):
     """fetches info from a url.
@@ -25,24 +25,37 @@ def downloadData(url):
 def processData(urlcontent):
     """Processes data retrieved from CSV file from url.
     """
-    filecontent = downloadData(urlcontent)
-    cr = csv.reader(filecontent)
+    cr = csv.reader(urlcontent)
     datadict = {}
-    try:
-        for row in cr:
-            cust_id = row[0] #Assuming ID is first on spreadsheet, followed by name, b-day
-            name = row[1]
-            bday = datetime.date(row[2])
-            if cust_id not in datadict:
-                datadict[cust_id] = (name, bday)
-    except Exception:
-        logging.basicConfig(filename='error.log',level=logging.DEBUG)
-        logging.debug('Something was in the incorrect format')
+
+    for row in cr:
+        cust_id = row[0] #Assuming ID is first on spreadsheet, followed by name, b-day
+        name = row[1]
+        linecount = 1
+        try:
+            bday = datetime.datetime(row[2])
+        except:
+            logging.debug('Date in incorrect format')
+
+        if cust_id not in datadict:
+            datadict[cust_id] = (name, bday)
+            linecount += 1
+
     return datadict
 
 def displayPerson(id, personData):
-    process
+    datadict = processData(personData)
+    try:
+        person_info = datadict.get(id)
+    except:
+        print "No user found with that ID"
+    return datadict
+
+def main():
+    try:
+        parser = argparse.ArgumentParser()
+        parser.add_argument('-url')
+        args = parser.parse_args()
 
 
-print processData('http://winterolympicsmedals.com/medals.csv')
 
