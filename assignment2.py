@@ -62,10 +62,10 @@ def main():
         parser.add_argument('-url', type=str)
         args = parser.parse_args()
         csvData = downloadData(args)
-    except Exception:
+    except Exception, e:
         LOG_FILENAME = 'errors.log'
         logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
-        logging.debug(("The following error occured: {}".format(Exception))
+        logging.debug(str(e))
         sys.exit()
     personData = processData(csvData)
     return personData
