@@ -13,9 +13,8 @@ import argparse
 LOG_FILENAME = 'error.log'
 logger = logging.getLogger('assignment2')
 logger.setLevel(logging.ERROR)
-handler = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=20,
-                                               backupCount=5,
-                                               )
+handler = logging.FileHandler(LOG_FILENAME)
+handler.setLevel(logging.ERROR)
 logger.addHandler(handler)
 
 def downloadData(url):
@@ -30,7 +29,8 @@ def downloadData(url):
     response = urllib2.urlopen(str(url))
 
     return response
-﻿
+
+
 def processData(csvData):
     """Processes data retrieved from CSV file from url.
     """
@@ -46,8 +46,7 @@ def processData(csvData):
         try:
             bday = datetime.datetime.strptime(row[2], format)
         except TypeError:
-            print('Error processing line {} for ID {}'.format(linenumber, cust_id))
-
+            logger.error('Error processing line {} for ID {}'.format(linenumber, cust_id))
 
         datadict[cust_id] = (name, bday)
 
@@ -85,4 +84,4 @@ if __name__ == '__main__':
     main()
 
 
-
+﻿print processData('https://s3.amazonaws.com/cuny-is211-spring2015/birthdays100.csv')
