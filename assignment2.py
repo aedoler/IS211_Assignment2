@@ -31,46 +31,48 @@ def processData(urlcontent):
     cr = csv.reader(urlcontent)
     datadict = {}
 
-    for row in cr:
-        cust_id = row[0] #Assuming ID is first on spreadsheet, followed by name, b-day
-        name = row[1]
-        linecount = 1
+    for linenumber, row in enumerate(cr):
+        cust_id = str(row[0]) #Assuming ID is first on spreadsheet, followed by name, b-day
+        name = str(row[1])
         try:
-            bday = datetime.datetime(row[2])
+            bday = datetime.datetime.strptime(str(row[2]), '%b %d %Y %I:%M%p')
         except:
-            logging.debug('Incorrect date format for entry')
+            logger.Assignment2('Error processing line %s for ID %s' % cust_id % linenumber)
 
-
-        if cust_id not in datadict:
-            datadict[cust_id] = (name, bday)
-            linecount += 1
+        datadict[cust_id] = (name, bday)
 
     return datadict
 
 def displayPerson(id, personData):
-    datadict = processData(personData)
+
     try:
-        person_info = datadict.get(id, default=None)
+        personData.get(id, default=None)
     except:
         print "No user found with that ID"
-    return "Person{} is {} with a birthday " \
-           "of {}".format(id, person_info[0], person_info[1])
+    message = "Person{} is {} with a birthday " \
+           "of {}".format(id, personData[id][0], personData[id][1])
+    return message
 
 def main():
+    global logger = logging.getLogger('assignment2')
+    logger.setLevel(logging.ERROR)
+    fh = logging.FileHandler('error.log')
+    fh.setLevel(logger.Error)
+    logger.addHandler(fh)
     try:
         parser = argparse.ArgumentParser()
         parser.add_argument('-url', type=str)
         args = parser.parse_args()
         csvData = downloadData(args)
-    except Exception, e:
-        LOG_FILENAME = 'errors.log'
-        logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
-        logging.debug(str(e))
+    except Exception:
         sys.exit()
     personData = processData(csvData)
+
+
     return personData
 
-
+if __name__ == '__main__':
+    main()
 
 
 
