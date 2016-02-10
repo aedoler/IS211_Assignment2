@@ -7,14 +7,16 @@ import urllib2
 import csv
 import datetime
 import logging
+import logging.handlers
 import argparse
 
-
+LOG_FILENAME = 'error.log'
 logger = logging.getLogger('assignment2')
 logger.setLevel(logging.ERROR)
-fh = logging.FileHandler(LOG_FILENAME)
-fh.setLevel(logger.Error)
-logger.addHandler(fh)
+handler = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=20,
+                                               backupCount=5,
+                                               )
+logger.addHandler(handler)
 
 def downloadData(url):
     """fetches info from a url.
@@ -42,7 +44,7 @@ def processData(urlcontent):
         try:
             bday = datetime.datetime.strptime(str(row[2]), '%b %d %Y %I:%M%p')
         except:
-            logger.assignment2('Error processing line %s for ID %s' % cust_id % linenumber)
+            assignment2.error('Error processing line %s for ID %s' % cust_id % linenumber)
 
         datadict[cust_id] = (name, bday)
 
@@ -73,8 +75,6 @@ def main():
         sys.exit()
     else:
         displayPerson(userinput, personData)
-
-
 
     return personData
 
