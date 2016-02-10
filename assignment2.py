@@ -10,6 +10,11 @@ import logging
 import argparse
 
 
+logger = logging.getLogger('assignment2')
+logger.setLevel(logging.ERROR)
+fh = logging.FileHandler(LOG_FILENAME)
+fh.setLevel(logger.Error)
+logger.addHandler(fh)
 
 def downloadData(url):
     """fetches info from a url.
@@ -37,7 +42,7 @@ def processData(urlcontent):
         try:
             bday = datetime.datetime.strptime(str(row[2]), '%b %d %Y %I:%M%p')
         except:
-            logger.Assignment2('Error processing line %s for ID %s' % cust_id % linenumber)
+            logger.assignment2('Error processing line %s for ID %s' % cust_id % linenumber)
 
         datadict[cust_id] = (name, bday)
 
@@ -54,19 +59,21 @@ def displayPerson(id, personData):
     return message
 
 def main():
-    global logger = logging.getLogger('assignment2')
-    logger.setLevel(logging.ERROR)
-    fh = logging.FileHandler('error.log')
-    fh.setLevel(logger.Error)
-    logger.addHandler(fh)
     try:
         parser = argparse.ArgumentParser()
         parser.add_argument('-url', type=str)
         args = parser.parse_args()
-        csvData = downloadData(args)
     except Exception:
         sys.exit()
+    csvData = downloadData(args)
     personData = processData(csvData)
+
+    userinput = int(raw_input('Please input an ID: '))
+    while userinput <= 0:
+        sys.exit()
+    else:
+        displayPerson(userinput, personData)
+
 
 
     return personData
