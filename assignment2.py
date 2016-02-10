@@ -28,22 +28,26 @@ def downloadData(url):
         downloadData(www.facebook.com)
     """
     response = urllib2.urlopen(str(url))
-    html = response.read()
-    return html
 
-def processData(urlcontent):
+    return response
+﻿
+def processData(csvData):
     """Processes data retrieved from CSV file from url.
     """
-    cr = csv.reader(urlcontent)
+    cr = csv.reader(csvData)
+    next(cr, None)
+    format = '%d/%m/%Y'
+    bday = 1
     datadict = {}
 
     for linenumber, row in enumerate(cr):
         cust_id = row[0] #Assuming ID is first on spreadsheet, followed by name, b-day
         name = row[1]
         try:
-            bday = datetime.datetime.strptime(row[2], '%b %d %Y %I:%M%p')
-        except:
-            assignment2.error('Error processing line %s for ID %s' % cust_id % linenumber)
+            bday = datetime.datetime.strptime(row[2], format)
+        except TypeError:
+            print('Error processing line {} for ID {}'.format(linenumber, cust_id))
+
 
         datadict[cust_id] = (name, bday)
 
