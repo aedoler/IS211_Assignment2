@@ -26,9 +26,8 @@ def downloadData(url):
         fetches website info
     Example:
         downloadData(www.facebook.com)
-        :rtype: variable
     """
-    response = urllib2.urlopen(str(url))
+    response = urllib2.urlopen(url)
 
     return response
 
@@ -58,14 +57,12 @@ def processData(csvData):
 def displayPerson(id, personData):
     """Returns person' data based on input ID
     """
-
     try:
-        personData.get(id, default=None)
+        print "Person {} is {} with a birthday " \
+              "of {}".format(id, personData[id][0], personData[id][1])
+
     except:
         print "No user found with that ID"
-    message = "Person{} is {} with a birthday " \
-              "of {}".format(id, personData[id][0], personData[id][1])
-    return message
 
 
 def main():
@@ -76,12 +73,13 @@ def main():
     parser.add_argument('-url', type=str)
     args = parser.parse_args()
     urlinput = args.url
+    urlinput = 'https://s3.amazonaws.com/cuny-is211-spring2015/birthdays100.csv'
 
     # sys.exit()
     csvData = downloadData(urlinput)
     personData = processData(csvData)
 
-    userinput = int(raw_input('Please input an ID: '))
+    userinput = (raw_input('Please input an ID: '))
     while userinput <= 0:
         sys.exit()
     else:
