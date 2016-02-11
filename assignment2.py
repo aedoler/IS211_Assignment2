@@ -71,13 +71,15 @@ def main():
     """Allows for user input in command line with parser.
     :rtype: object
     """
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-url', type=str)
-    args = parser.parse_args()
-    urlinput = args.url
-    urlinput = 'https://s3.amazonaws.com/cuny-is211-spring2015/birthdays100.csv'
-
-    # sys.exit()
+    try:
+        parser = argparse.ArgumentParser()
+        parser.add_argument('-url', type=str)
+        args = parser.parse_args()
+        urlinput = args.url
+        urlinput = 'https://s3.amazonaws.com/cuny-is211-spring2015/birthdays100.csv'
+    except:
+        if url == None:
+            sys.exit()
     csvData = downloadData(urlinput)
     personData = processData(csvData)
 
