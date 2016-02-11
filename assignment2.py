@@ -60,9 +60,11 @@ def displayPerson(id, personData):
     try:
         print "Person {} is {} with a birthday " \
               "of {}".format(id, personData[id][0], personData[id][1])
+        main() # keep program running
 
     except:
-        print "No user found with that ID"
+        print "No user found with that ID, please try again"
+        main() # keep program running
 
 
 def main():
