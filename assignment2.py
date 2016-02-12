@@ -1,6 +1,10 @@
 #!user/bin/env python
 # -*- coding: utf-8 -*-
-"""Part 1"""
+"""Assignment 2.
+Input to calls program in terminal with argparse:
+python assignment2.py --url
+https://s3.amazonaws.com/cuny-is211-spring2015/birthdays100.csv
+"""
 
 import sys
 import urllib2
@@ -26,6 +30,7 @@ def downloadData(url):
         fetches website info
     Example:
         downloadData(www.facebook.com)
+        :rtype: object
     """
     response = urllib2.urlopen(url)
 
@@ -71,16 +76,15 @@ def main():
     """Allows for user input in command line with parser.
     :rtype: object
     """
-    try:
-        parser = argparse.ArgumentParser()
-        parser.add_argument('-url', type=str)
-        args = parser.parse_args()
-        urlinput = args.url
-        urlinput = 'https://s3.amazonaws.com/cuny-is211-spring2015/birthdays100.csv'
-    except:
-        if url == None:
-            sys.exit()
-    csvData = downloadData(urlinput)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--url')
+    args = parser.parse_args()
+    print args
+    # urlinput = 'https://s3.amazonaws.com/cuny-is211-spring2015/birthdays100.csv'
+    if args == None:
+        sys.exit()
+    csvData = downloadData(args.url)
     personData = processData(csvData)
 
     userinput = (raw_input('Please input an ID: '))
