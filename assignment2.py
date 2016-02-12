@@ -39,6 +39,10 @@ def downloadData(url):
 
 def processData(csvData):
     """Processes data retrieved from CSV file from url.
+    Args:
+        csvData (csv): download csv file
+    Returns:
+        Iterates over csv file to return a dictionary
     """
     cr = csv.reader(csvData)
     next(cr, None)
@@ -61,6 +65,17 @@ def processData(csvData):
 
 def displayPerson(id, personData):
     """Returns person' data based on input ID
+    Args:
+        id (int): 1-100 of id' to look up
+        personData (dict): dict produced by processData() func
+    Returns:
+        message with values of name and bday corresponding to user id
+        return other message if id <= 0, as defined in main() func
+    Examples:
+        >>> 5
+        Person 5 is NAME with a birthday of BDAY
+        >>>-1
+        No user found with that ID, please try again
     """
     try:
         print "Person {} is {} with a birthday " \
@@ -74,6 +89,15 @@ def displayPerson(id, personData):
 
 def main():
     """Allows for user input in command line with parser.
+    Args:
+        None
+    Returns:
+        Calls downloadData, processData and displayPerson funcs
+    Examples:
+    >>>python assignment2.py --url
+    https://s3.amazonaws.com/cuny-is211-spring2015/birthdays100.csv
+    "Please input an ID" 99
+    Person 99 is Alan Wilson with a birthday of 1960-04-03 00:00:00
     :rtype: object
     """
 
