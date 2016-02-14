@@ -84,7 +84,6 @@ def displayPerson(id, personData):
 
     except:
         print "No user found with that ID, please try again"
-        main() # keep program running
 
 
 def main():
