@@ -103,7 +103,6 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--url')
     args = parser.parse_args()
-    print args
     # urlinput = 'https://s3.amazonaws.com/cuny-is211-spring2015/birthdays100.csv'
     if args == None:
         sys.exit()
